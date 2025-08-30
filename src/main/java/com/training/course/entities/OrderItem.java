@@ -15,7 +15,7 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private OrderItemPK oItemPK = new OrderItemPK();
+	private OrderItemPK id = new OrderItemPK();
 
 	private Integer quantity;
 	private Double price;
@@ -25,27 +25,28 @@ public class OrderItem implements Serializable {
 
 	public OrderItem(Order order, Product product, Integer quantity, Double price) {
 		super();
-		oItemPK.setOrder(order);
-		oItemPK.setProduct(product);
+		id.setOrder(order);
+		id.setProduct(product);
 		this.quantity = quantity;
 		this.price = price;
 	}
 
 	@JsonIgnore
 	public Order getOrder() {
-		return oItemPK.getOrder();
+		return id.getOrder();
 	}
 
 	public void setOrder(Order order) {
-		oItemPK.setOrder(order);
+		id.setOrder(order);
 	}
 
+
 	public Product getProduct() {
-		return oItemPK.getProduct();
+		return id.getProduct();
 	}
 
 	public void setProduct(Product product) {
-		oItemPK.setProduct(product);
+		id.setProduct(product);
 	}
 
 	public Integer getQuantity() {
@@ -72,7 +73,7 @@ public class OrderItem implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((oItemPK == null) ? 0 : oItemPK.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -85,10 +86,10 @@ public class OrderItem implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		OrderItem other = (OrderItem) obj;
-		if (oItemPK == null) {
-			if (other.oItemPK != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!oItemPK.equals(other.oItemPK))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

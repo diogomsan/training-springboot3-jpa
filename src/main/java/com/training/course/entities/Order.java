@@ -5,12 +5,10 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.logging.log4j.message.StructuredDataMessage.Format;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.training.course.entities.enums.OrderStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -40,9 +39,14 @@ public class Order implements Serializable {
 
 	private Integer orderStatus;
     
-	@OneToMany(mappedBy = "oItemPK.order")
+	@OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
-    public Order() {
+
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	private Payment payment;
+
+
+	public Order() {
     }
 
 
@@ -88,8 +92,24 @@ public class Order implements Serializable {
 		}
 	}
 
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+
 	public Set<OrderItem> getItems() {
 		return items;
+	}
+
+	public Double getTotal() {
+		double sum = 0.0;
+		for (OrderItem x : items) {
+			sum += x.getSubTotal();
+		}
+		return sum;
 	}
 
 
